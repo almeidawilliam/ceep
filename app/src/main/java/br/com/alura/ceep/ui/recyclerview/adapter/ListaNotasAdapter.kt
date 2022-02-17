@@ -12,13 +12,9 @@ import br.com.alura.ceep.ui.model.Nota
 class ListaNotasAdapter(
     private val context: Context,
     private val listaNotas: List<Nota>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder>() {
 
-    class NotaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotaViewHolder {
         val viewCriada = LayoutInflater
             .from(context)
             .inflate(R.layout.item_nota, parent, false)
@@ -26,15 +22,23 @@ class ListaNotasAdapter(
         return NotaViewHolder(viewCriada)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NotaViewHolder, position: Int) {
         val nota = listaNotas[position]
-        val tituloView = holder.itemView.findViewById<TextView>(R.id.item_nota_titulo)
-        tituloView.text = nota.titulo
-
-        val descricaoView = holder.itemView.findViewById<TextView>(R.id.item_nota_descricao)
-        descricaoView.text = nota.descricao
+        holder.vincula(nota)
     }
 
     override fun getItemCount(): Int =
         listaNotas.size
+
+    class NotaViewHolder(
+        itemView: View
+    ) : RecyclerView.ViewHolder(itemView) {
+        private val tituloView = itemView.findViewById<TextView>(R.id.item_nota_titulo)
+        private val descricaoView = itemView.findViewById<TextView>(R.id.item_nota_descricao)
+
+        fun vincula(nota: Nota) {
+            tituloView.text = nota.titulo
+            descricaoView.text = nota.descricao
+        }
+    }
 }

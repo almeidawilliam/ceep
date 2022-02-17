@@ -23,8 +23,7 @@ class ListaNotas : AppCompatActivity() {
                 Nota("Note $i", "description")
             )
         }
-        
-        val notes = dao.todos()
+
         listView.adapter = ListaNotasAdapter(this@ListaNotas, dao.todos())
         val layoutManager = LinearLayoutManager(this@ListaNotas)
         listView.layoutManager = layoutManager
