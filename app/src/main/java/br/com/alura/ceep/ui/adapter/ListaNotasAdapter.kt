@@ -26,7 +26,7 @@ class ListaNotasAdapter(
         return 0
     }
 
-    override fun getView(posicao: Int, view: View, viewGroup: ViewGroup): View {
+    override fun getView(posicao: Int, view: View?, viewGroup: ViewGroup?): View {
         val viewCriada: View =
             LayoutInflater.from(context).inflate(R.layout.item_nota, viewGroup, false)
         val nota: Nota = notas[posicao]

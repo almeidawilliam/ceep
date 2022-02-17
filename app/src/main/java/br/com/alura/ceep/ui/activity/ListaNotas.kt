@@ -1,12 +1,12 @@
 package br.com.alura.ceep.ui.activity
 
 import android.os.Bundle
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
-import br.com.alura.ceep.ui.adapter.ListaNotasAdapter
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
+import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
 
 class ListaNotas : AppCompatActivity() {
 
@@ -14,12 +14,16 @@ class ListaNotas : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
 
-        val listView = findViewById<ListView>(R.id.listView)
+        val listView = findViewById<RecyclerView>(R.id.lista_notas_recyclerview)
         val dao = NotaDAO()
-        dao.insere(
-            Nota("First note", "First description")
-        )
+
+        for (i in 1..1000) {
+            dao.insere(
+                Nota("Note $i", "description")
+            )
+        }
+        
         val notes = dao.todos()
-        listView.adapter = ListaNotasAdapter(this, notes)
+        listView.setAdapter(ListaNotasAdapter(dao.todos()))
     }
 }
