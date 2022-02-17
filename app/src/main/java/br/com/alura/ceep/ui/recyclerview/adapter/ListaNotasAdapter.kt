@@ -15,9 +15,10 @@ class ListaNotasAdapter(
 ) : RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotaViewHolder {
-        val viewCriada = LayoutInflater
-            .from(context)
-            .inflate(R.layout.item_nota, parent, false)
+        val viewCriada =
+            LayoutInflater
+                .from(context)
+                .inflate(R.layout.item_nota, parent, false)
 
         return NotaViewHolder(viewCriada)
     }
