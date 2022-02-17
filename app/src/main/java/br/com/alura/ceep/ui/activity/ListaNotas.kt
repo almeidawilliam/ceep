@@ -2,6 +2,7 @@ package br.com.alura.ceep.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.dao.NotaDAO
@@ -24,6 +25,8 @@ class ListaNotas : AppCompatActivity() {
         }
         
         val notes = dao.todos()
-        listView.setAdapter(ListaNotasAdapter(dao.todos()))
+        listView.adapter = ListaNotasAdapter(this@ListaNotas, dao.todos())
+        val layoutManager = LinearLayoutManager(this@ListaNotas)
+        listView.layoutManager = layoutManager
     }
 }
