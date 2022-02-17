@@ -6,18 +6,18 @@ import java.util.*
 class NotaDAO {
 
     companion object {
-        private val notas: ArrayList<Nota?> = ArrayList<Nota?>()
+        private val notas: MutableList<Nota> = ArrayList()
     }
 
     fun todos(): List<Nota> {
-        return notas.clone() as List<Nota>
+        return ArrayList(notas)
     }
 
-    fun insere(vararg notas: Nota?) {
-        Companion.notas.addAll(Arrays.asList(*notas))
+    fun insere(vararg notas: Nota) {
+        Companion.notas.addAll(listOf(*notas))
     }
 
-    fun altera(posicao: Int, nota: Nota?) {
+    fun altera(posicao: Int, nota: Nota) {
         notas[posicao] = nota
     }
 

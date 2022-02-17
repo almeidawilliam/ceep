@@ -14,7 +14,6 @@ class ListaNotasAdapter(
     private val notas: List<Nota>
 ) : BaseAdapter() {
 
-
     override fun getCount(): Int {
         return notas.size
     }
@@ -31,10 +30,13 @@ class ListaNotasAdapter(
         val viewCriada: View =
             LayoutInflater.from(context).inflate(R.layout.item_nota, viewGroup, false)
         val nota: Nota = notas[posicao]
-        val titulo: TextView = viewCriada.findViewById<TextView>(R.id.item_nota_titulo)
-        titulo.setText(nota.titulo)
-        val descricao: TextView = viewCriada.findViewById<TextView>(R.id.item_nota_descricao)
-        descricao.setText(nota.descricao)
+
+        val titulo: TextView = viewCriada.findViewById(R.id.item_nota_titulo)
+        titulo.text = nota.titulo
+
+        val descricao: TextView = viewCriada.findViewById(R.id.item_nota_descricao)
+        descricao.text = nota.descricao
+
         return viewCriada
     }
 

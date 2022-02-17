@@ -14,12 +14,12 @@ class ListaNotas : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
 
-        val findViewById = findViewById<ListView>(R.id.listView)
+        val listView = findViewById<ListView>(R.id.listView)
         val dao = NotaDAO()
         dao.insere(
             Nota("First note", "First description")
         )
         val notes = dao.todos()
-        findViewById.adapter = ListaNotasAdapter(this, notes)
+        listView.adapter = ListaNotasAdapter(this, notes)
     }
 }
