@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ceep">
         <activity
-            android:name=".NotesList"
+            android:name=".ui.activity.ListaNotas"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
