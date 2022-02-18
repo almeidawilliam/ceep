@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.model.Nota
+import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener
 
 class ListaNotasAdapter(
     private val context: Context,
@@ -41,20 +42,18 @@ class ListaNotasAdapter(
     inner class NotaViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
+        private lateinit var nota: Nota
         private val tituloView = itemView.findViewById<TextView>(R.id.item_nota_titulo)
         private val descricaoView = itemView.findViewById<TextView>(R.id.item_nota_descricao)
 
         init {
-            itemView.setOnClickListener(
-                View.OnClickListener {
-                    view -> {
-                    onItemClickListener.onItemClick()
-                }
-                }
-            )
+            itemView.setOnClickListener {
+                onItemClickListener.onItemClick(nota)
+            }
         }
 
         fun vincula(nota: Nota) {
+            this.nota = nota
             tituloView.text = nota.titulo
             descricaoView.text = nota.descricao
         }

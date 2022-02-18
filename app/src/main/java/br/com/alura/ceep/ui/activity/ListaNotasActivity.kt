@@ -15,7 +15,7 @@ import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOT
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
-import br.com.alura.ceep.ui.recyclerview.adapter.OnItemClickListener
+import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener
 
 class ListaNotasActivity : AppCompatActivity() {
 
@@ -24,10 +24,20 @@ class ListaNotasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
-        val todasNotas: MutableList<Nota> = NotaDAO().todos()
-        configuraRecyclerView(todasNotas)
+        val todasNotas = notasDeExemplo()
+        configuraRecyclerView(notasDeExemplo())
         val startForResult = registerForActivityResult()
         configuraBotaoInsereNota(startForResult)
+    }
+
+    fun notasDeExemplo(): MutableList<Nota> {
+        val dao = NotaDAO()
+        for (i in 1..10) {
+            dao.insere(
+                Nota("Título $i", "Descrição $i")
+            )
+        }
+        return dao.todos()
     }
 
     private fun configuraBotaoInsereNota(startForResult: ActivityResultLauncher<Intent>) {
@@ -79,11 +89,12 @@ class ListaNotasActivity : AppCompatActivity() {
         notas: MutableList<Nota>
     ) {
         this.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
-        listView.adapter = this.adapter
         this.adapter.onItemClickListener =
             object : OnItemClickListener {
-                override fun onItemClick() {
+                override fun onItemClick(nota: Nota) {
+                    Toast.makeText(this@ListaNotasActivity, nota.titulo, Toast.LENGTH_SHORT).show()
                 }
             }
+        listView.adapter = this.adapter
     }
 }
