@@ -11,7 +11,7 @@ import br.com.alura.ceep.ui.model.Nota
 
 class ListaNotasAdapter(
     private val context: Context,
-    private val listaNotas: List<Nota>
+    private val listaNotas: MutableList<Nota>
 ) : RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotaViewHolder {
@@ -30,6 +30,11 @@ class ListaNotasAdapter(
 
     override fun getItemCount(): Int =
         listaNotas.size
+
+    fun adiciona(nota: Nota) {
+        listaNotas.add(nota)
+        notifyDataSetChanged()
+    }
 
     class NotaViewHolder(
         itemView: View

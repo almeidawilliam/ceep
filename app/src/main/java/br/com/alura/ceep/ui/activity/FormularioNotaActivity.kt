@@ -1,5 +1,6 @@
 package br.com.alura.ceep.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -27,7 +28,9 @@ class FormularioNotaActivity : AppCompatActivity() {
 
             val notaCriada = Nota(titulo.text.toString(), descricao.text.toString())
 
-            NotaDAO().insere(notaCriada)
+            val resultadoInsercao = Intent()
+            resultadoInsercao.putExtra("nota", notaCriada)
+            setResult(2, resultadoInsercao)
             finish()
         }
         return super.onOptionsItemSelected(item)
