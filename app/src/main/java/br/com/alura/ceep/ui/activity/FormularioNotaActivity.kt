@@ -7,10 +7,12 @@ import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.ceep.R
-import br.com.alura.ceep.ui.dao.NotaDAO
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_CRIADA
 import br.com.alura.ceep.ui.model.Nota
 
 class FormularioNotaActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario_nota)
@@ -22,17 +24,27 @@ class FormularioNotaActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (R.id.menu_formulario_nota_ic_salva == item.itemId) {
-            val titulo = findViewById<EditText>(R.id.formulario_nota_titulo)
-            val descricao = findViewById<EditText>(R.id.formulario_nota_descricao)
-
-            val notaCriada = Nota(titulo.text.toString(), descricao.text.toString())
-
-            val resultadoInsercao = Intent()
-            resultadoInsercao.putExtra("nota", notaCriada)
-            setResult(2, resultadoInsercao)
+        if (ehMenuSalvaNota(item)) {
+            val notaCriada = criaNota()
+            retornaNota(notaCriada)
             finish()
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun retornaNota(notaCriada: Nota) {
+        val resultadoInsercao = Intent()
+        resultadoInsercao.putExtra(CHAVE_NOTA, notaCriada)
+        setResult(CODIGO_RESULTADO_NOTA_CRIADA, resultadoInsercao)
+    }
+
+    private fun criaNota(): Nota {
+        val titulo = findViewById<EditText>(R.id.formulario_nota_titulo)
+        val descricao = findViewById<EditText>(R.id.formulario_nota_descricao)
+
+        return Nota(titulo.text.toString(), descricao.text.toString())
+    }
+
+    private fun ehMenuSalvaNota(item: MenuItem) =
+        R.id.menu_formulario_nota_ic_salva == item.itemId
 }

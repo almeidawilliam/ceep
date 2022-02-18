@@ -9,6 +9,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_CRIADA
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
@@ -16,31 +18,39 @@ import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
 class ListaNotasActivity : AppCompatActivity() {
 
     private lateinit var adapter: ListaNotasAdapter
-    private var todasNotas: MutableList<Nota> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
-        todasNotas = notasDeExemplo()
+        val todasNotas: MutableList<Nota> = NotaDAO().todos()
         configuraRecyclerView(todasNotas)
-
         val startForResult = registerForActivityResult()
+        configuraBotaoInsereNota(startForResult)
+    }
 
+    private fun configuraBotaoInsereNota(startForResult: ActivityResultLauncher<Intent>) {
         val botaoInsereNota = findViewById<TextView>(R.id.lista_notas_insere_nota)
         botaoInsereNota.setOnClickListener {
-            val iniciaFormularioNota =
-                Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
-            startForResult.launch(iniciaFormularioNota)
-//            startActivityForResult(iniciaFormularioNota, 1)
+            vaiParaFormularioNotaActivity(startForResult)
         }
+    }
+
+    private fun vaiParaFormularioNotaActivity(startForResult: ActivityResultLauncher<Intent>) {
+        val iniciaFormularioNota =
+            Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
+        startForResult.launch(iniciaFormularioNota)
+        //            startActivityForResult(iniciaFormularioNota, 1)
     }
 
     private fun registerForActivityResult(): ActivityResultLauncher<Intent> {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { result: ActivityResult ->
-                if (result.resultCode == 2 && result.data != null && result.data!!.hasExtra("nota")) {
-                    val notaRecebida = result.data!!.getSerializableExtra("nota") as Nota
+                if (result.resultCode == CODIGO_RESULTADO_NOTA_CRIADA
+                    && result.data != null
+                    && result.data!!.hasExtra(CHAVE_NOTA)
+                ) {
+                    val notaRecebida = result.data!!.getSerializableExtra(CHAVE_NOTA) as Nota
                     NotaDAO().insere(notaRecebida)
                     adapter.adiciona(notaRecebida)
                 }
@@ -56,16 +66,6 @@ class ListaNotasActivity : AppCompatActivity() {
 //        }
 //        super.onActivityResult(requestCode, resultCode, data)
 //    }
-
-    private fun notasDeExemplo(): MutableList<Nota> {
-        val dao = NotaDAO()
-
-        dao.insere(
-            Nota("Nota 1", "descrição 1"),
-            Nota("Nota 2", "descrição 2"),
-        )
-        return dao.todos()
-    }
 
     private fun configuraRecyclerView(notas: MutableList<Nota>) {
         val listView = findViewById<RecyclerView>(R.id.lista_notas_recyclerview)
