@@ -12,11 +12,14 @@ import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
 
 class ListaNotasActivity : AppCompatActivity() {
 
+    private lateinit var adapter: ListaNotasAdapter
+    private var todasNotas: MutableList<Nota> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
-        val notasDeExemplo = notasDeExemplo()
-        configuraRecyclerView(notasDeExemplo)
+        todasNotas = notasDeExemplo()
+        configuraRecyclerView(todasNotas)
 
         val botaoInsereNota = findViewById<TextView>(R.id.lista_notas_insere_nota)
         botaoInsereNota.setOnClickListener {
@@ -27,12 +30,14 @@ class ListaNotasActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        val notaDAO = NotaDAO()
-        configuraRecyclerView(notaDAO.todos())
+        val dao = NotaDAO()
+        todasNotas.clear()
+        todasNotas.addAll(dao.todos())
+        adapter.notifyDataSetChanged()
         super.onResume()
     }
 
-    private fun notasDeExemplo(): List<Nota> {
+    private fun notasDeExemplo(): MutableList<Nota> {
         val dao = NotaDAO()
 
         dao.insere(
@@ -51,6 +56,7 @@ class ListaNotasActivity : AppCompatActivity() {
         listView: RecyclerView,
         notas: List<Nota>
     ) {
-        listView.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
+        this.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
+        listView.adapter = this.adapter
     }
 }

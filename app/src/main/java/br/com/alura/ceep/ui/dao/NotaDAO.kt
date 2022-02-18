@@ -9,8 +9,8 @@ class NotaDAO {
         private val notas: MutableList<Nota> = ArrayList()
     }
 
-    fun todos(): List<Nota> {
-        return ArrayList(notas)
+    fun todos(): MutableList<Nota> {
+        return notas.toMutableList()
     }
 
     fun insere(vararg notas: Nota) {
