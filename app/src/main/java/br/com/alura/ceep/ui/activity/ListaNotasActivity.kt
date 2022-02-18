@@ -1,21 +1,35 @@
 package br.com.alura.ceep.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
 
-class ListaNotas : AppCompatActivity() {
+class ListaNotasActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
         val notasDeExemplo = notasDeExemplo()
         configuraRecyclerView(notasDeExemplo)
+
+        val botaoInsereNota = findViewById<TextView>(R.id.lista_notas_insere_nota)
+        botaoInsereNota.setOnClickListener {
+            val iniciaFormularioNota =
+                Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
+            startActivity(iniciaFormularioNota)
+        }
+    }
+
+    override fun onResume() {
+        val notaDAO = NotaDAO()
+        configuraRecyclerView(notaDAO.todos())
+        super.onResume()
     }
 
     private fun notasDeExemplo(): List<Nota> {
@@ -37,6 +51,6 @@ class ListaNotas : AppCompatActivity() {
         listView: RecyclerView,
         notas: List<Nota>
     ) {
-        listView.adapter = ListaNotasAdapter(this@ListaNotas, notas)
+        listView.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
     }
 }
