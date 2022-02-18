@@ -3,6 +3,7 @@ package br.com.alura.ceep.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,6 +15,7 @@ import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOT
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
+import br.com.alura.ceep.ui.recyclerview.adapter.OnItemClickListener
 
 class ListaNotasActivity : AppCompatActivity() {
 
@@ -78,5 +80,10 @@ class ListaNotasActivity : AppCompatActivity() {
     ) {
         this.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
         listView.adapter = this.adapter
+        this.adapter.onItemClickListener =
+            object : OnItemClickListener {
+                override fun onItemClick() {
+                }
+            }
     }
 }

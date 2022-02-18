@@ -14,6 +14,8 @@ class ListaNotasAdapter(
     private val listaNotas: MutableList<Nota>
 ) : RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder>() {
 
+    lateinit var onItemClickListener: OnItemClickListener
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotaViewHolder {
         val viewCriada =
             LayoutInflater
@@ -36,11 +38,21 @@ class ListaNotasAdapter(
         notifyDataSetChanged()
     }
 
-    class NotaViewHolder(
+    inner class NotaViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
         private val tituloView = itemView.findViewById<TextView>(R.id.item_nota_titulo)
         private val descricaoView = itemView.findViewById<TextView>(R.id.item_nota_descricao)
+
+        init {
+            itemView.setOnClickListener(
+                View.OnClickListener {
+                    view -> {
+                    onItemClickListener.onItemClick()
+                }
+                }
+            )
+        }
 
         fun vincula(nota: Nota) {
             tituloView.text = nota.titulo
