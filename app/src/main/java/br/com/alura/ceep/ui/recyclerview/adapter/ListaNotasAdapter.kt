@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
+import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener
+import java.util.*
 
 class ListaNotasAdapter(
     private val context: Context,
@@ -46,6 +48,11 @@ class ListaNotasAdapter(
 
     fun remove(posicao: Int) {
         listaNotas.removeAt(posicao)
+        notifyDataSetChanged()
+    }
+
+    fun troca(posicaoInicio: Int, posicaoFim: Int) {
+        Collections.swap(listaNotas, posicaoInicio, posicaoFim)
         notifyDataSetChanged()
     }
 

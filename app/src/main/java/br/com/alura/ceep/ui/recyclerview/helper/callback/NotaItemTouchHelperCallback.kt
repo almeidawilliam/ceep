@@ -14,7 +14,8 @@ class NotaItemTouchHelperCallback(
         viewHolder: RecyclerView.ViewHolder
     ): Int {
         val marcacoesDeDeslize = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        return makeMovementFlags(0, marcacoesDeDeslize)
+        val marcacoesDeArrastar = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        return makeMovementFlags(marcacoesDeArrastar, marcacoesDeDeslize)
     }
 
     override fun onMove(
@@ -22,7 +23,9 @@ class NotaItemTouchHelperCallback(
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        return false
+        NotaDAO().troca(viewHolder.adapterPosition, target.adapterPosition)
+        adapter.troca(viewHolder.adapterPosition, target.adapterPosition)
+        return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
