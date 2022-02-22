@@ -1,5 +1,6 @@
 package br.com.alura.ceep.ui.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO
-import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_CRIADA
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
@@ -59,13 +59,14 @@ class ListaNotasActivity : AppCompatActivity() {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { result: ActivityResult ->
-                if (result.resultCode == CODIGO_RESULTADO_NOTA_CRIADA
+                if (result.resultCode == Activity.RESULT_OK
                     && result.data != null
                     && result.data!!.hasExtra(CHAVE_NOTA)
                 ) {
                     val notaRecebida = result.data!!.getSerializableExtra(CHAVE_NOTA) as Nota
                     NotaDAO().insere(notaRecebida)
                     adapter.adiciona(notaRecebida)
+//                } else if (result.resultCode == Activity.RESULT_CANCELED){
                 }
             }
         return startForResult
@@ -94,7 +95,11 @@ class ListaNotasActivity : AppCompatActivity() {
         this.adapter.onItemClickListener =
             object : OnItemClickListener {
                 override fun onItemClick(nota: Nota, posicao: Int) {
-                    vaiParaFormularioNotaActivityAltera(nota, posicao, registerForActivityResultAltera)
+                    vaiParaFormularioNotaActivityAltera(
+                        nota,
+                        posicao,
+                        registerForActivityResultAltera
+                    )
                 }
             }
         listView.adapter = this.adapter
@@ -115,7 +120,7 @@ class ListaNotasActivity : AppCompatActivity() {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { result: ActivityResult ->
-                if (result.resultCode == CODIGO_RESULTADO_NOTA_CRIADA
+                if (result.resultCode == Activity.RESULT_OK
                     && result.data != null
                     && result.data!!.hasExtra(CHAVE_NOTA)
                 ) {
