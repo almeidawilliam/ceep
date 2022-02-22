@@ -9,18 +9,23 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_CRIADA
 import br.com.alura.ceep.ui.model.Nota
+import kotlin.properties.Delegates
 
 class FormularioNotaActivity : AppCompatActivity() {
+
+    private var posicaoRecebida by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario_nota)
 
         val dadosRecebidos = intent
-        if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
+        if (dadosRecebidos.hasExtra(CHAVE_NOTA) && dadosRecebidos.hasExtra(CHAVE_POSICAO)) {
             val nota = dadosRecebidos.getSerializableExtra(CHAVE_NOTA) as Nota
+            posicaoRecebida = dadosRecebidos.getIntExtra(CHAVE_POSICAO, -1)
 
             val tituloView = findViewById<TextView>(R.id.formulario_nota_titulo)
             val descricaoView = findViewById<TextView>(R.id.formulario_nota_descricao)
@@ -47,6 +52,7 @@ class FormularioNotaActivity : AppCompatActivity() {
     private fun retornaNota(notaCriada: Nota) {
         val resultadoInsercao = Intent()
         resultadoInsercao.putExtra(CHAVE_NOTA, notaCriada)
+        resultadoInsercao.putExtra(CHAVE_POSICAO, posicaoRecebida)
         setResult(CODIGO_RESULTADO_NOTA_CRIADA, resultadoInsercao)
     }
 

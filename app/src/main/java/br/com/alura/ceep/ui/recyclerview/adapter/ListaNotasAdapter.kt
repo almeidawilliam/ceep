@@ -39,6 +39,11 @@ class ListaNotasAdapter(
         notifyDataSetChanged()
     }
 
+    fun altera(posicao: Int, notaRecebida: Nota) {
+        listaNotas[posicao] = notaRecebida
+        notifyDataSetChanged()
+    }
+
     inner class NotaViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
@@ -48,7 +53,7 @@ class ListaNotasAdapter(
 
         init {
             itemView.setOnClickListener {
-                onItemClickListener.onItemClick(nota)
+                onItemClickListener.onItemClick(nota, adapterPosition)
             }
         }
 

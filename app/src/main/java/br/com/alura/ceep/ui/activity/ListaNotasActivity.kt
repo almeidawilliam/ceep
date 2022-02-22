@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_ALTERADA
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_CRIADA
 import br.com.alura.ceep.ui.dao.NotaDAO
@@ -92,9 +93,10 @@ class ListaNotasActivity : AppCompatActivity() {
         this.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
         this.adapter.onItemClickListener =
             object : OnItemClickListener {
-                override fun onItemClick(nota: Nota) {
+                override fun onItemClick(nota: Nota, posicao: Int) {
                     val intent = Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
                     intent.putExtra(CHAVE_NOTA, nota)
+                    intent.putExtra(CHAVE_POSICAO, posicao)
                     registerForActivityResult2.launch(intent)
                 }
             }
@@ -105,13 +107,15 @@ class ListaNotasActivity : AppCompatActivity() {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { result: ActivityResult ->
-                if (result.resultCode == CODIGO_RESULTADO_NOTA_ALTERADA
+                if (result.resultCode == CODIGO_RESULTADO_NOTA_CRIADA
                     && result.data != null
                     && result.data!!.hasExtra(CHAVE_NOTA)
+                    && result.data!!.hasExtra(CHAVE_POSICAO)
                 ) {
                     val notaRecebida = result.data!!.getSerializableExtra(CHAVE_NOTA) as Nota
-                    NotaDAO().insere(notaRecebida)
-                    adapter.adiciona(notaRecebida)
+                    val posicaoRecebida = result.data!!.getIntExtra(CHAVE_POSICAO, -1)
+                    NotaDAO().altera(posicaoRecebida, notaRecebida)
+                    adapter.altera(posicaoRecebida, notaRecebida)
                 }
             }
         return startForResult
