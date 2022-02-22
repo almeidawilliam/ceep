@@ -23,11 +23,16 @@ import br.com.alura.ceep.ui.recyclerview.helper.callback.NotaItemTouchHelperCall
 
 class ListaNotasActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TITULO_APPBAR = "Notas"
+    }
+
     private lateinit var adapter: ListaNotasAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
+        title = (TITULO_APPBAR)
 //        val todasNotas = notasDeExemplo()
         configuraRecyclerView(notasDeExemplo())
         val startForResult = registerForActivityResultInsere()

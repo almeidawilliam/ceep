@@ -15,6 +15,11 @@ import br.com.alura.ceep.ui.model.Nota
 
 class FormularioNotaActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TITULO_APPBAR_INSERE = "Insere nota"
+        private const val TITULO_APPBAR_ALTERA = "Altera nota"
+    }
+
     private var posicaoRecebida = POSICAO_INVALIDA
     private lateinit var tituloView: TextView
     private lateinit var descricaoView: TextView
@@ -23,9 +28,11 @@ class FormularioNotaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario_nota)
         inicializaCampos()
+        title = TITULO_APPBAR_INSERE
 
         val dadosRecebidos = intent
         if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
+            title = TITULO_APPBAR_ALTERA
             val nota = dadosRecebidos.getSerializableExtra(CHAVE_NOTA) as Nota
             posicaoRecebida = dadosRecebidos.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA)
             preencheCampos(nota)
