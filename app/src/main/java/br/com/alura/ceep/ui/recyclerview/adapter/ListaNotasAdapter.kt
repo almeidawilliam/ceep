@@ -44,6 +44,11 @@ class ListaNotasAdapter(
         notifyDataSetChanged()
     }
 
+    fun remove(posicao: Int) {
+        listaNotas.removeAt(posicao)
+        notifyDataSetChanged()
+    }
+
     inner class NotaViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {

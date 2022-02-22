@@ -86,7 +86,7 @@ class ListaNotasActivity : AppCompatActivity() {
     private fun configuraRecyclerView(notas: MutableList<Nota>) {
         val listView = findViewById<RecyclerView>(R.id.lista_notas_recyclerview)
         configuraAdapter(listView, notas)
-        val itemTouchHelper = ItemTouchHelper(NotaItemTouchHelperCallback())
+        val itemTouchHelper = ItemTouchHelper(NotaItemTouchHelperCallback(adapter))
         itemTouchHelper.attachToRecyclerView(listView)
     }
 
