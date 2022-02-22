@@ -34,6 +34,17 @@ class ListaNotasActivity : AppCompatActivity() {
         configuraBotaoInsereNota(startForResult)
     }
 
+    private fun configuraRecyclerView(notas: MutableList<Nota>) {
+        val listView = findViewById<RecyclerView>(R.id.lista_notas_recyclerview)
+        configuraAdapter(listView, notas)
+        configuraItemTouchHelper(listView)
+    }
+
+    private fun configuraItemTouchHelper(listView: RecyclerView?) {
+        val itemTouchHelper = ItemTouchHelper(NotaItemTouchHelperCallback(adapter))
+        itemTouchHelper.attachToRecyclerView(listView)
+    }
+
     fun notasDeExemplo(): MutableList<Nota> {
         val dao = NotaDAO()
         for (i in 1..10) {
@@ -82,13 +93,6 @@ class ListaNotasActivity : AppCompatActivity() {
 //        }
 //        super.onActivityResult(requestCode, resultCode, data)
 //    }
-
-    private fun configuraRecyclerView(notas: MutableList<Nota>) {
-        val listView = findViewById<RecyclerView>(R.id.lista_notas_recyclerview)
-        configuraAdapter(listView, notas)
-        val itemTouchHelper = ItemTouchHelper(NotaItemTouchHelperCallback(adapter))
-        itemTouchHelper.attachToRecyclerView(listView)
-    }
 
     private fun configuraAdapter(
         listView: RecyclerView,
