@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
@@ -18,6 +19,7 @@ import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener
+import br.com.alura.ceep.ui.recyclerview.helper.callback.NotaItemTouchHelperCallback
 
 class ListaNotasActivity : AppCompatActivity() {
 
@@ -84,6 +86,8 @@ class ListaNotasActivity : AppCompatActivity() {
     private fun configuraRecyclerView(notas: MutableList<Nota>) {
         val listView = findViewById<RecyclerView>(R.id.lista_notas_recyclerview)
         configuraAdapter(listView, notas)
+        val itemTouchHelper = ItemTouchHelper(NotaItemTouchHelperCallback())
+        itemTouchHelper.attachToRecyclerView(listView)
     }
 
     private fun configuraAdapter(
