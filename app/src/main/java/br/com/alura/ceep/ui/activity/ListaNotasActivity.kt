@@ -3,6 +3,7 @@ package br.com.alura.ceep.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,7 +28,7 @@ class ListaNotasActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lista_notas)
 //        val todasNotas = notasDeExemplo()
         configuraRecyclerView(notasDeExemplo())
-        val startForResult = registerForActivityResult()
+        val startForResult = registerForActivityResultInsere()
         configuraBotaoInsereNota(startForResult)
     }
 
@@ -44,18 +45,17 @@ class ListaNotasActivity : AppCompatActivity() {
     private fun configuraBotaoInsereNota(startForResult: ActivityResultLauncher<Intent>) {
         val botaoInsereNota = findViewById<TextView>(R.id.lista_notas_insere_nota)
         botaoInsereNota.setOnClickListener {
-            vaiParaFormularioNotaActivity(startForResult)
+            vaiParaFormularioNotaActivityInsere(startForResult)
         }
     }
 
-    private fun vaiParaFormularioNotaActivity(startForResult: ActivityResultLauncher<Intent>) {
+    private fun vaiParaFormularioNotaActivityInsere(startForResult: ActivityResultLauncher<Intent>) {
         val iniciaFormularioNota =
             Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
         startForResult.launch(iniciaFormularioNota)
-        //            startActivityForResult(iniciaFormularioNota, 1)
     }
 
-    private fun registerForActivityResult(): ActivityResultLauncher<Intent> {
+    private fun registerForActivityResultInsere(): ActivityResultLauncher<Intent> {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { result: ActivityResult ->
@@ -89,33 +89,50 @@ class ListaNotasActivity : AppCompatActivity() {
         listView: RecyclerView,
         notas: MutableList<Nota>
     ) {
-        val registerForActivityResult2 = registerForActivityResult2()
+        val registerForActivityResultAltera = registerForActivityResultAltera()
         this.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
         this.adapter.onItemClickListener =
             object : OnItemClickListener {
                 override fun onItemClick(nota: Nota, posicao: Int) {
-                    val intent = Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
-                    intent.putExtra(CHAVE_NOTA, nota)
-                    intent.putExtra(CHAVE_POSICAO, posicao)
-                    registerForActivityResult2.launch(intent)
+                    vaiParaFormularioNotaActivityAltera(nota, posicao, registerForActivityResultAltera)
                 }
             }
         listView.adapter = this.adapter
     }
 
-    private fun registerForActivityResult2(): ActivityResultLauncher<Intent> {
+    private fun vaiParaFormularioNotaActivityAltera(
+        nota: Nota,
+        posicao: Int,
+        registerForActivityResult: ActivityResultLauncher<Intent>
+    ) {
+        val intent = Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
+        intent.putExtra(CHAVE_NOTA, nota)
+        intent.putExtra(CHAVE_POSICAO, posicao)
+        registerForActivityResult.launch(intent)
+    }
+
+    private fun registerForActivityResultAltera(): ActivityResultLauncher<Intent> {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { result: ActivityResult ->
                 if (result.resultCode == CODIGO_RESULTADO_NOTA_CRIADA
                     && result.data != null
                     && result.data!!.hasExtra(CHAVE_NOTA)
-                    && result.data!!.hasExtra(CHAVE_POSICAO)
                 ) {
+                    result.data
                     val notaRecebida = result.data!!.getSerializableExtra(CHAVE_NOTA) as Nota
                     val posicaoRecebida = result.data!!.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA)
-                    NotaDAO().altera(posicaoRecebida, notaRecebida)
-                    adapter.altera(posicaoRecebida, notaRecebida)
+
+                    if (posicaoRecebida > POSICAO_INVALIDA) {
+                        NotaDAO().altera(posicaoRecebida, notaRecebida)
+                        adapter.altera(posicaoRecebida, notaRecebida)
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Ocorreu um problema na alteração da nota",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         return startForResult
