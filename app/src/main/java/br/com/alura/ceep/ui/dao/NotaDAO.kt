@@ -6,7 +6,7 @@ import java.util.*
 class NotaDAO {
 
     companion object {
-        private val notas: MutableList<Nota> = ArrayList()
+        private var notas: MutableList<Nota> = ArrayList()
     }
 
     fun todos(): MutableList<Nota> {
@@ -14,7 +14,7 @@ class NotaDAO {
     }
 
     fun insere(vararg notas: Nota) {
-        Companion.notas.addAll(listOf(*notas))
+        Companion.notas.addAll(notas.toMutableList())
     }
 
     fun altera(posicao: Int, nota: Nota) {

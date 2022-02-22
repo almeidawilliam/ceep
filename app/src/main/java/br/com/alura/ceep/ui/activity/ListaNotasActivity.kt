@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO
-import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_ALTERADA
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_CRIADA
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
@@ -25,7 +25,7 @@ class ListaNotasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
-        val todasNotas = notasDeExemplo()
+//        val todasNotas = notasDeExemplo()
         configuraRecyclerView(notasDeExemplo())
         val startForResult = registerForActivityResult()
         configuraBotaoInsereNota(startForResult)
@@ -113,7 +113,7 @@ class ListaNotasActivity : AppCompatActivity() {
                     && result.data!!.hasExtra(CHAVE_POSICAO)
                 ) {
                     val notaRecebida = result.data!!.getSerializableExtra(CHAVE_NOTA) as Nota
-                    val posicaoRecebida = result.data!!.getIntExtra(CHAVE_POSICAO, -1)
+                    val posicaoRecebida = result.data!!.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA)
                     NotaDAO().altera(posicaoRecebida, notaRecebida)
                     adapter.altera(posicaoRecebida, notaRecebida)
                 }
