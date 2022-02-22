@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
@@ -16,6 +17,17 @@ class FormularioNotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario_nota)
+
+        val dadosRecebidos = intent
+        if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
+            val nota = dadosRecebidos.getSerializableExtra(CHAVE_NOTA) as Nota
+
+            val tituloView = findViewById<TextView>(R.id.formulario_nota_titulo)
+            val descricaoView = findViewById<TextView>(R.id.formulario_nota_descricao)
+
+            tituloView.text = nota.titulo
+            descricaoView.text = nota.descricao
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

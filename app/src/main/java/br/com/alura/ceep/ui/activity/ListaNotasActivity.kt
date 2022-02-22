@@ -3,7 +3,6 @@ package br.com.alura.ceep.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.R
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA
+import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_ALTERADA
 import br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULTADO_NOTA_CRIADA
 import br.com.alura.ceep.ui.dao.NotaDAO
 import br.com.alura.ceep.ui.model.Nota
@@ -88,13 +88,32 @@ class ListaNotasActivity : AppCompatActivity() {
         listView: RecyclerView,
         notas: MutableList<Nota>
     ) {
+        val registerForActivityResult2 = registerForActivityResult2()
         this.adapter = ListaNotasAdapter(this@ListaNotasActivity, notas)
         this.adapter.onItemClickListener =
             object : OnItemClickListener {
                 override fun onItemClick(nota: Nota) {
-                    Toast.makeText(this@ListaNotasActivity, nota.titulo, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@ListaNotasActivity, FormularioNotaActivity::class.java)
+                    intent.putExtra(CHAVE_NOTA, nota)
+                    registerForActivityResult2.launch(intent)
                 }
             }
         listView.adapter = this.adapter
+    }
+
+    private fun registerForActivityResult2(): ActivityResultLauncher<Intent> {
+        val startForResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result: ActivityResult ->
+                if (result.resultCode == CODIGO_RESULTADO_NOTA_ALTERADA
+                    && result.data != null
+                    && result.data!!.hasExtra(CHAVE_NOTA)
+                ) {
+                    val notaRecebida = result.data!!.getSerializableExtra(CHAVE_NOTA) as Nota
+                    NotaDAO().insere(notaRecebida)
+                    adapter.adiciona(notaRecebida)
+                }
+            }
+        return startForResult
     }
 }
