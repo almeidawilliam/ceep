@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,8 +32,8 @@ class ListaNotasActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notas)
         title = (TITULO_APPBAR)
-//        val todasNotas = notasDeExemplo()
-        configuraRecyclerView(notasDeExemplo())
+        val todasNotas = //notasDeExemplo()
+        configuraRecyclerView(todasNotas())
         val startForResult = registerForActivityResultInsere()
         configuraBotaoInsereNota(startForResult)
     }
@@ -50,13 +49,13 @@ class ListaNotasActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(listView)
     }
 
-    fun notasDeExemplo(): MutableList<Nota> {
+    private fun todasNotas() : MutableList<Nota> {
         val dao = NotaDAO()
-        for (i in 1..10) {
-            dao.insere(
-                Nota("Título $i", "Descrição $i")
-            )
-        }
+//        for (i in 1..10) {
+//            dao.insere(
+//                Nota("Título $i", "Descrição $i")
+//            )
+//        }
         return dao.todos()
     }
 
@@ -144,12 +143,12 @@ class ListaNotasActivity : AppCompatActivity() {
                     if (posicaoRecebida > POSICAO_INVALIDA) {
                         NotaDAO().altera(posicaoRecebida, notaRecebida)
                         adapter.altera(posicaoRecebida, notaRecebida)
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "Ocorreu um problema na alteração da nota",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                    } else {
+//                        Toast.makeText(
+//                            this,
+//                            "Ocorreu um problema na alteração da nota",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
                 }
             }

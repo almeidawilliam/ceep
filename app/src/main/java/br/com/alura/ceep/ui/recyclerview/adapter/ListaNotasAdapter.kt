@@ -38,22 +38,23 @@ class ListaNotasAdapter(
 
     fun adiciona(nota: Nota) {
         listaNotas.add(nota)
-        notifyDataSetChanged()
+        notifyItemInserted(listaNotas.indexOf(nota))
     }
 
     fun altera(posicao: Int, notaRecebida: Nota) {
         listaNotas[posicao] = notaRecebida
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
+        notifyItemChanged(posicao)
     }
 
     fun remove(posicao: Int) {
         listaNotas.removeAt(posicao)
-        notifyDataSetChanged()
+        notifyItemRemoved(posicao)
     }
 
     fun troca(posicaoInicio: Int, posicaoFim: Int) {
         Collections.swap(listaNotas, posicaoInicio, posicaoFim)
-        notifyDataSetChanged()
+        notifyItemMoved(posicaoInicio, posicaoFim)
     }
 
     inner class NotaViewHolder(
